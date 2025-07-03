@@ -1,6 +1,7 @@
 package per.sinabro.port.`in`.service
 
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import per.sinabro.domain.Ticket
 import per.sinabro.domain.TicketReservation
 import per.sinabro.port.`in`.usecase.CreateTicket
@@ -16,6 +17,7 @@ class TicketService(
     private val loadTicket: LoadTicket
 ) : ReserveTicket, CreateTicket {
 
+    @Transactional
     override fun reserve(userId: Long, ticketId: Long): Long {
         val ticket = findTicket.findByIdIsReserved(ticketId, false) ?: throw RuntimeException("Not found ticket.")
 
@@ -25,6 +27,7 @@ class TicketService(
         return 0
     }
 
+    @Transactional
     override fun create() {
         loadTicket.loadTicket(Ticket())
     }
