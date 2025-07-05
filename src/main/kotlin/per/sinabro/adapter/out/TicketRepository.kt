@@ -10,9 +10,13 @@ class TicketRepository(
     private val ticketJpaRepository: TicketJpaRepository
 ) : FindTicket, LoadTicket {
 
-    override fun findByIdIsReserved(id: Long, isReservation: Boolean): Ticket? = ticketJpaRepository.findByIdAndIsReserved(id, isReservation)
+    override fun findByIdIsReserved(id: Long, isReservation: Boolean): Ticket? =
+        ticketJpaRepository.findByIdAndIsReserved(id, isReservation)
 
-    override fun loadTicket(ticket: Ticket) {
-        ticketJpaRepository.save(ticket)
+    override fun findByIdIsReservedForPriority(id: Long, isReservation: Boolean): Ticket? =
+        ticketJpaRepository.findByIdAndIsReservedForUpdate(id, isReservation)
+
+    override fun loadTicket(ticket: Ticket): Ticket {
+        return ticketJpaRepository.save(ticket)
     }
 }

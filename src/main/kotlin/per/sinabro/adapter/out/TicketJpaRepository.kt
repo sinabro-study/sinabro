@@ -7,7 +7,9 @@ import org.springframework.data.jpa.repository.Query
 import per.sinabro.domain.Ticket
 
 interface TicketJpaRepository : JpaRepository<Ticket, Long> {
+    fun findByIdAndIsReserved(id: Long, isReserved: Boolean): Ticket?
+
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT ticket FROM Ticket ticket WHERE ticket.id = :id and isReserved = :isReserved")
-    fun findByIdAndIsReserved(id: Long, isReserved: Boolean): Ticket?
+    fun findByIdAndIsReservedForUpdate(id: Long, isReserved: Boolean): Ticket?
 }

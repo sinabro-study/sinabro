@@ -28,7 +28,17 @@ class TicketService(
     }
 
     @Transactional
-    override fun create() {
-        loadTicket.loadTicket(Ticket())
+    override fun reservePriority(userId: Long, ticketId: Long): Long {
+        val ticket = findTicket.findByIdIsReservedForPriority(ticketId, false) ?: throw RuntimeException("Not found ticket.")
+
+        ticket.reserve()
+        loadTicketReservation.load(TicketReservation(userId, ticket))
+
+        return 0
+    }
+
+    @Transactional
+    override fun create(): Long {
+        return loadTicket.loadTicket(Ticket()).id ?: 0
     }
 }

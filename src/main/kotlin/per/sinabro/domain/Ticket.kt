@@ -7,7 +7,7 @@ class Ticket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private var id: Long? = null
+    var id: Long? = null
 
     @Column(length = 1, nullable = false)
     private var isReserved: Boolean = false
