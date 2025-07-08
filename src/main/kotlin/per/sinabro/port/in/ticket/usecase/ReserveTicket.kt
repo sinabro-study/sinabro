@@ -1,4 +1,4 @@
-package per.sinabro.port.`in`.usecase
+package per.sinabro.port.`in`.ticket.usecase
 
 interface ReserveTicket {
     fun reserve(userId: Long, ticketId: Long): Long

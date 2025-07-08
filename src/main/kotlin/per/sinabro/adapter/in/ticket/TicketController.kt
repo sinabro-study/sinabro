@@ -1,12 +1,12 @@
-package per.sinabro.adapter.`in`
+package per.sinabro.adapter.`in`.ticket
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
-import per.sinabro.adapter.`in`.request.ReserveTicketRequest
-import per.sinabro.port.`in`.usecase.CreateTicket
-import per.sinabro.port.`in`.usecase.ReserveTicket
+import per.sinabro.adapter.`in`.ticket.request.ReserveTicketRequest
+import per.sinabro.port.`in`.ticket.usecase.CreateTicket
+import per.sinabro.port.`in`.ticket.usecase.ReserveTicket
 
 @RestController
 class TicketController(

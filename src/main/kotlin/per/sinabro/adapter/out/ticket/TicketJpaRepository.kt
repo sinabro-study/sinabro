@@ -1,10 +1,10 @@
-package per.sinabro.adapter.out
+package per.sinabro.adapter.out.ticket
 
 import jakarta.persistence.LockModeType
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Lock
 import org.springframework.data.jpa.repository.Query
-import per.sinabro.domain.Ticket
+import per.sinabro.domain.ticket.Ticket
 
 interface TicketJpaRepository : JpaRepository<Ticket, Long> {
     fun findByIdAndIsReserved(id: Long, isReserved: Boolean): Ticket?

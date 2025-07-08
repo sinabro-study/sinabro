@@ -1,4 +1,4 @@
-package per.sinabro.domain
+package per.sinabro.domain.ticket
 
 import jakarta.persistence.*
 

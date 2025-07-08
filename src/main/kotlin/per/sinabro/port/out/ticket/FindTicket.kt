@@ -1,6 +1,6 @@
-package per.sinabro.port.out
+package per.sinabro.port.out.ticket
 
-import per.sinabro.domain.Ticket
+import per.sinabro.domain.ticket.Ticket
 
 interface FindTicket {
     fun findByIdIsReserved(id: Long, isReservation: Boolean): Ticket?

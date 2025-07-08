@@ -1,6 +1,6 @@
-package per.sinabro.port.out
+package per.sinabro.port.out.ticket
 
-import per.sinabro.domain.TicketReservation
+import per.sinabro.domain.ticket.TicketReservation
 
 interface LoadTicketReservation {
     fun load(ticketReservation: TicketReservation)

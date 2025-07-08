@@ -1,8 +1,8 @@
-package per.sinabro.adapter.out
+package per.sinabro.adapter.out.ticket
 
 import org.springframework.stereotype.Repository
-import per.sinabro.domain.TicketReservation
-import per.sinabro.port.out.LoadTicketReservation
+import per.sinabro.domain.ticket.TicketReservation
+import per.sinabro.port.out.ticket.LoadTicketReservation
 
 @Repository
 class TicketReservationRepository(

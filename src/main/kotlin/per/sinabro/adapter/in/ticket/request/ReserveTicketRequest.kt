@@ -1,4 +1,4 @@
-package per.sinabro.adapter.`in`.request
+package per.sinabro.adapter.`in`.ticket.request
 
 data class ReserveTicketRequest(
     val userId: Long,
