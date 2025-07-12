@@ -36,7 +36,7 @@ class TicketServiceTest(
         failCount shouldBe theadCount * theadCount - theadCount
     }
 
-    test("동시성 이슈 해결") {
+    test("DB Lock으로 동시성 이슈 해결") {
         val theadCount = 10
         val limitCount = 1
         val ticketId = ticketService.create()
@@ -46,6 +46,31 @@ class TicketServiceTest(
             Callable {
                 try {
                     ticketService.reservePriority(1, ticketId)
+                    true
+                } catch (e: Exception) {
+                    false
+                }
+            }
+        }
+        val results = executorService.invokeAll(tasks).map { it.get() }
+
+        val successCount = results.count { it }
+        val failCount = results.count { !it }
+
+        successCount shouldBe limitCount
+        failCount shouldBe theadCount * theadCount - limitCount
+    }
+
+    test("Redis Lock으로 동시성 이슈 해결") {
+        val theadCount = 10
+        val limitCount = 1
+        val ticketId = ticketService.create()
+
+        val executorService = Executors.newFixedThreadPool(theadCount)
+        val tasks = List(theadCount * theadCount) {
+            Callable {
+                try {
+                    ticketService.reservePriorityV2(1, ticketId)
                     true
                 } catch (e: Exception) {
                     false
