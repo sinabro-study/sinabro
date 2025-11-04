@@ -6,3 +6,5 @@ docker exec -it broker-1 /opt/kafka/bin/kafka-get-offsets.sh \
   --time -1
 ```
 TicketCreated:0:10
+
+![kafka-topics](./images/kafka-topics.png)
