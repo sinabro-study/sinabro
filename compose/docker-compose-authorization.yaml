@@ -30,7 +30,7 @@ services:
       MYSQL_PASSWORD: 1234
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./docker/authorization.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ./authorization.sql:/docker-entrypoint-initdb.d/init.sql:ro
     networks:
       - authorization_network
 
