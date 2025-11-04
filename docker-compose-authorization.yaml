@@ -8,7 +8,6 @@ services:
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       KC_DB: mysql
-      KC_DB_SCHEMA: public
       KC_FEATURES: "docker"
       KC_DB_URL: jdbc:mysql://mysql:3306/sinabro
       KC_DB_USERNAME: sinabro
@@ -17,6 +16,8 @@ services:
       - start-dev
     depends_on:
       - mysql
+    networks:
+      - authorization_network
   mysql:
     image: mysql:latest
     container_name: mysql
@@ -29,6 +30,13 @@ services:
       MYSQL_PASSWORD: 1234
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./docker/authorization.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - authorization_network
 
 volumes:
   mysql_data:
+
+networks:
+  authorization_network:
+    driver: bridge
