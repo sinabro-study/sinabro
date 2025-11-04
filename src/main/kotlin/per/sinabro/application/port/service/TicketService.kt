@@ -1,4 +1,4 @@
-package per.sinabro.application.port.`in`.ticket.service
+package per.sinabro.application.port.service
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
