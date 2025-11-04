@@ -1,4 +1,4 @@
-package per.sinabro.port.out.ticket
+package per.sinabro.application.port.out.ticket
 
 import per.sinabro.domain.ticket.TicketReservation
 

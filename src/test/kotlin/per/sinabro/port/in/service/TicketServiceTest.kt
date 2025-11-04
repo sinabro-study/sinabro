@@ -3,7 +3,7 @@ package per.sinabro.port.`in`.service
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import org.springframework.boot.test.context.SpringBootTest
-import per.sinabro.port.`in`.ticket.service.TicketService
+import per.sinabro.application.port.`in`.ticket.service.TicketService
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 

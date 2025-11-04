@@ -2,8 +2,8 @@ package per.sinabro.adapter.out.redis
 
 import org.redisson.api.RedissonClient
 import org.springframework.stereotype.Component
-import per.sinabro.port.out.lock.AcquireLock
-import per.sinabro.port.out.lock.ReleaseLock
+import per.sinabro.application.port.out.lock.AcquireLock
+import per.sinabro.application.port.out.lock.ReleaseLock
 import java.util.concurrent.TimeUnit
 
 private const val WAIT_SECONDS = 3L

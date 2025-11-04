@@ -1,16 +1,16 @@
-package per.sinabro.port.`in`.ticket.service
+package per.sinabro.application.port.`in`.ticket.service
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import per.sinabro.domain.ticket.Ticket
 import per.sinabro.domain.ticket.TicketReservation
-import per.sinabro.port.`in`.ticket.usecase.CreateTicket
-import per.sinabro.port.`in`.ticket.usecase.ReserveTicket
-import per.sinabro.port.out.lock.AcquireLock
-import per.sinabro.port.out.lock.ReleaseLock
-import per.sinabro.port.out.ticket.FindTicket
-import per.sinabro.port.out.ticket.LoadTicket
-import per.sinabro.port.out.ticket.LoadTicketReservation
+import per.sinabro.application.port.`in`.ticket.usecase.CreateTicket
+import per.sinabro.application.port.`in`.ticket.usecase.ReserveTicket
+import per.sinabro.application.port.out.lock.AcquireLock
+import per.sinabro.application.port.out.lock.ReleaseLock
+import per.sinabro.application.port.out.ticket.FindTicket
+import per.sinabro.application.port.out.ticket.LoadTicket
+import per.sinabro.application.port.out.ticket.LoadTicketReservation
 
 @Service
 class TicketService(

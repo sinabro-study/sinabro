@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import per.sinabro.adapter.`in`.ticket.request.ReserveTicketRequest
-import per.sinabro.port.`in`.ticket.usecase.CreateTicket
-import per.sinabro.port.`in`.ticket.usecase.ReserveTicket
+import per.sinabro.application.port.`in`.ticket.usecase.CreateTicket
+import per.sinabro.application.port.`in`.ticket.usecase.ReserveTicket
 
 @RestController
 class TicketController(
