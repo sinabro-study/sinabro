@@ -14,7 +14,7 @@ services:
     volumes:
       - controller1_data:/var/lib/kafka/data
     networks:
-      - kafka-net
+      - event_network
 
   controller-2:
     image: confluentinc/cp-kafka:7.6.0
@@ -31,7 +31,7 @@ services:
     volumes:
       - controller2_data:/var/lib/kafka/data
     networks:
-      - kafka-net
+      - event_network
 
   controller-3:
     image: confluentinc/cp-kafka:7.6.0
@@ -48,7 +48,7 @@ services:
     volumes:
       - controller3_data:/var/lib/kafka/data
     networks:
-      - kafka-net
+      - event_network
 
   broker-1:
     image: confluentinc/cp-kafka:7.6.0
@@ -74,7 +74,7 @@ services:
     volumes:
       - broker1_data:/var/lib/kafka/data
     networks:
-      - kafka-net
+      - event_network
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
@@ -87,7 +87,7 @@ services:
     depends_on:
       - broker-1
     networks:
-      - kafka-net
+      - event_network
 
 volumes:
   controller1_data:
@@ -96,5 +96,5 @@ volumes:
   broker1_data:
 
 networks:
-  kafka-net:
+  event_network:
     driver: bridge
