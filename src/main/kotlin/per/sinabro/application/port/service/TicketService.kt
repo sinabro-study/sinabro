@@ -1,5 +1,6 @@
 package per.sinabro.application.port.service
 
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import per.sinabro.domain.ticket.Ticket
@@ -11,6 +12,7 @@ import per.sinabro.application.port.out.lock.ReleaseLock
 import per.sinabro.application.port.out.ticket.FindTicket
 import per.sinabro.application.port.out.ticket.LoadTicket
 import per.sinabro.application.port.out.ticket.LoadTicketReservation
+import per.sinabro.domain.ticket.event.RegisterTicketEvent
 
 @Service
 class TicketService(
@@ -18,7 +20,8 @@ class TicketService(
     private val findTicket: FindTicket,
     private val loadTicket: LoadTicket,
     private val acquireLock: AcquireLock,
-    private val releaseLock: ReleaseLock
+    private val releaseLock: ReleaseLock,
+    private val applicationEventPublisher: ApplicationEventPublisher
 ) : ReserveTicket, CreateTicket {
 
     @Transactional
@@ -64,6 +67,12 @@ class TicketService(
 
     @Transactional
     override fun create(): Long {
-        return loadTicket.loadTicket(Ticket()).id ?: 0
+        val ticketId = loadTicket.loadTicket(Ticket()).id ?: 0
+
+        applicationEventPublisher.publishEvent(
+            RegisterTicketEvent(ticketId = ticketId)
+        )
+
+        return ticketId
     }
 }
