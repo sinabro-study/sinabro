@@ -21,7 +21,7 @@ class TicketService(
     private val loadTicket: LoadTicket,
     private val acquireLock: AcquireLock,
     private val releaseLock: ReleaseLock,
-    private val applicationEventPublisher: ApplicationEventPublisher
+    private val eventPublisher: ApplicationEventPublisher
 ) : ReserveTicket, CreateTicket {
 
     @Transactional
@@ -69,7 +69,7 @@ class TicketService(
     override fun create(): Long {
         val ticketId = loadTicket.loadTicket(Ticket()).id ?: 0
 
-        applicationEventPublisher.publishEvent(
+        eventPublisher.publishEvent(
             RegisterTicketEvent(ticketId = ticketId)
         )
 
