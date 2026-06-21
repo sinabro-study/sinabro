@@ -22,13 +22,13 @@ class AccountApplicationService(
     override fun withdraw(id: Long) {
         val account = findAccount.findAccount(id) ?: throw RuntimeException("Account not found")
 
-        println("[Before Update] Account Balance: ${account.balance}")
+        println("[Update / BeforeWithdraw] Account Balance: ${account.balance}")
         account.withdraw()
         entityManager.flush()
-        println("[After Update] Account Balance: ${account.balance}")
+        println("[Update / AfterWithdraw] Account Balance: ${account.balance}")
 
         Thread.sleep(1_000)
-        println("[Commit Update] Account Balance: ${account.balance}")
+        println("[Update / CommitWithdraw] Account Balance: ${account.balance}")
     }
 
     @Transactional(isolation = Isolation.READ_UNCOMMITTED)
