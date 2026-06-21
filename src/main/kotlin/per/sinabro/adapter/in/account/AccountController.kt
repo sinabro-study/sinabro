@@ -15,9 +15,9 @@ class AccountController(
     private val checkAccountUsecase: CheckAccountUsecase
 ) {
 
-    @PatchMapping("/account/withdraw/dirty")
+    @PatchMapping("/account/withdraw")
     fun withdrawForDirtyRead() {
-        withdrawAccountUsecase.withdrawForDirtyRead()
+        withdrawAccountUsecase.withdraw()
     }
 
     @PostMapping("/account")
@@ -27,6 +27,6 @@ class AccountController(
 
     @GetMapping("/account")
     fun account() {
-        checkAccountUsecase.checkForDirtyReadWithReadUncommited()
+        checkAccountUsecase.checkReadUncommited()
     }
 }

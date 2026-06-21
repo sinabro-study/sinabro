@@ -19,7 +19,7 @@ class AccountApplicationService(
 ) : WithdrawAccountUsecase, RegisterAccountUsecase, CheckAccountUsecase {
 
     @Transactional
-    override fun withdrawForDirtyRead() {
+    override fun withdraw() {
         val account = findAccount.findAccount(1) ?: throw RuntimeException("Account not found")
 
         println("[Before Update] Account Balance: ${account.balance}")
@@ -32,7 +32,7 @@ class AccountApplicationService(
     }
 
     @Transactional(isolation = Isolation.READ_UNCOMMITTED)
-    override fun checkForDirtyReadWithReadUncommited() {
+    override fun checkReadUncommited() {
         val account = findAccount.findAccount(1) ?: throw RuntimeException("Account not found")
         println("[Check Update] Account Balance: ${account.balance}")
     }
