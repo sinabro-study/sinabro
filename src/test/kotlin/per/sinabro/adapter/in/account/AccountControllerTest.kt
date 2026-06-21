@@ -4,6 +4,9 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.boot.test.web.client.exchange
+import org.springframework.boot.test.web.client.getForObject
+import org.springframework.boot.test.web.client.postForObject
 import org.springframework.http.HttpMethod
 import java.util.concurrent.Executors
 
@@ -23,17 +26,17 @@ class AccountControllerTest(
      * Dirty Read 가 발생하는지 검증한다.
      */
     test("Dirty Read: withdraw flush 후 READ_UNCOMMITTED 로 미커밋 데이터 조회") {
-        val accountId = restTemplate.postForObject("/account", null, Long::class.java)!!
+        val accountId = restTemplate.postForObject<Long>("/account")!!
 
         val executor = Executors.newSingleThreadExecutor()
         val withdrawFuture = executor.submit {
-            restTemplate.exchange("/account/$accountId/withdraw", HttpMethod.PATCH, null, Unit::class.java)
+            restTemplate.exchange<Unit>("/account/$accountId/withdraw", HttpMethod.PATCH, null)
         }
 
         // withdraw 가 flush 를 완료할 때까지 대기 (withdraw 내부 sleep = 1s)
         Thread.sleep(200)
 
-        val balance = restTemplate.getForObject("/account/$accountId/uncommited", Long::class.java)!!
+        val balance = restTemplate.getForObject<Long>("/account/$accountId/uncommited")!!
 
         withdrawFuture.get()
         executor.shutdown()
@@ -52,7 +55,7 @@ class AccountControllerTest(
      * 같은 트랜잭션 내에서 두 번 읽었는데 결과가 다른 Non-Repeatable Read 를 검증한다.
      */
     test("Non-Repeatable Read: READ_COMMITTED 에서 두 번의 읽기 결과가 다름") {
-        val accountId = restTemplate.postForObject("/account", null, Long::class.java)!!
+        val accountId = restTemplate.postForObject<Long>("/account")!!
 
         val executor = Executors.newSingleThreadExecutor()
         @Suppress("UNCHECKED_CAST")
@@ -64,7 +67,7 @@ class AccountControllerTest(
         Thread.sleep(500)
 
         // 5초 대기 구간에서 withdraw 커밋
-        restTemplate.exchange("/account/$accountId/withdraw", HttpMethod.PATCH, null, Unit::class.java)
+        restTemplate.exchange<Unit>("/account/$accountId/withdraw", HttpMethod.PATCH)
 
         val balances = checkFuture.get()!!
         executor.shutdown()
