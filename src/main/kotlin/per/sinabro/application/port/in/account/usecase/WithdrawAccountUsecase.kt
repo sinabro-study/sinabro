@@ -1,5 +1,5 @@
 package per.sinabro.application.port.`in`.account.usecase
 
 interface WithdrawAccountUsecase {
-    fun withdraw()
+    fun withdraw(id: Long)
 }

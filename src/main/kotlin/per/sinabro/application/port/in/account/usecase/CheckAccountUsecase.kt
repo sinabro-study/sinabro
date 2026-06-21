@@ -1,6 +1,6 @@
 package per.sinabro.application.port.`in`.account.usecase
 
 interface CheckAccountUsecase {
-    fun checkReadUncommited()
-    fun checkReadCommited()
+    fun checkReadUncommited(id: Long): Long
+    fun checkReadCommited(id: Long): List<Long>
 }

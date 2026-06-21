@@ -2,6 +2,7 @@ package per.sinabro.adapter.`in`.account
 
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 import per.sinabro.application.port.`in`.account.usecase.CheckAccountUsecase
@@ -15,23 +16,23 @@ class AccountController(
     private val checkAccountUsecase: CheckAccountUsecase
 ) {
 
-    @PatchMapping("/account/withdraw")
-    fun withdraw() {
-        withdrawAccountUsecase.withdraw()
-    }
-
     @PostMapping("/account")
-    fun registerAccount() {
-        registerAccountUsecase.register()
+    fun registerAccount(): Long {
+        return registerAccountUsecase.register()
     }
 
-    @GetMapping("/account/uncommited")
-    fun accountForUncommitted() {
-        checkAccountUsecase.checkReadUncommited()
+    @PatchMapping("/account/{id}/withdraw")
+    fun withdraw(@PathVariable id: Long) {
+        withdrawAccountUsecase.withdraw(id)
     }
 
-    @GetMapping("/account/commited")
-    fun accountForCommitted() {
-        checkAccountUsecase.checkReadCommited()
+    @GetMapping("/account/{id}/uncommited")
+    fun accountForUncommitted(@PathVariable id: Long): Long {
+        return checkAccountUsecase.checkReadUncommited(id)
+    }
+
+    @GetMapping("/account/{id}/commited")
+    fun accountForCommitted(@PathVariable id: Long): List<Long> {
+        return checkAccountUsecase.checkReadCommited(id)
     }
 }

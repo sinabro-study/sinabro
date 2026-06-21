@@ -10,8 +10,8 @@ class AccountRepository(
     private val accountJpaRepository: AccountJpaRepository
 ) : LoadAccount, FindAccount {
 
-    override fun loadAccount(account: Account) {
-        accountJpaRepository.save(account)
+    override fun loadAccount(account: Account): Long {
+        return accountJpaRepository.save(account).id!!
     }
 
     override fun findAccount(id: Long): Account? {
