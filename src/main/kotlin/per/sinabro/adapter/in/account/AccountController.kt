@@ -15,8 +15,8 @@ class AccountController(
     private val checkAccountUsecase: CheckAccountUsecase
 ) {
 
-    @PatchMapping("/account/withdraw")
-    fun withdraw() {
+    @PatchMapping("/account/withdraw/dirty")
+    fun withdrawForDirtyRead() {
         withdrawAccountUsecase.withdrawForDirtyRead()
     }
 
