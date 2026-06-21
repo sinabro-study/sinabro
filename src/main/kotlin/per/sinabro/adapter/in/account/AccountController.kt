@@ -16,7 +16,7 @@ class AccountController(
 ) {
 
     @PatchMapping("/account/withdraw")
-    fun withdrawForDirtyRead() {
+    fun withdraw() {
         withdrawAccountUsecase.withdraw()
     }
 
@@ -25,8 +25,13 @@ class AccountController(
         registerAccountUsecase.register()
     }
 
-    @GetMapping("/account")
-    fun account() {
+    @GetMapping("/account/uncommited")
+    fun accountForUncommitted() {
         checkAccountUsecase.checkReadUncommited()
+    }
+
+    @GetMapping("/account/commited")
+    fun accountForCommitted() {
+        checkAccountUsecase.checkReadCommited()
     }
 }

@@ -27,7 +27,7 @@ class AccountApplicationService(
         entityManager.flush()
         println("[After Update] Account Balance: ${account.balance}")
 
-        Thread.sleep(30_000)
+        Thread.sleep(1_000)
         println("[Commit Update] Account Balance: ${account.balance}")
     }
 
@@ -35,6 +35,19 @@ class AccountApplicationService(
     override fun checkReadUncommited() {
         val account = findAccount.findAccount(1) ?: throw RuntimeException("Account not found")
         println("[Check Update] Account Balance: ${account.balance}")
+    }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    override fun checkReadCommited() {
+        val account1 = findAccount.findAccount(1) ?: throw RuntimeException("Account not found")
+        entityManager.clear()
+        println("[Check] Account1 Balance: ${account1.balance}")
+
+        Thread.sleep(5_000)
+
+        val account2 = findAccount.findAccount(1) ?: throw RuntimeException("Account not found")
+        entityManager.clear()
+        println("[Check] Account2 Balance: ${account2.balance}")
     }
 
     @Transactional
