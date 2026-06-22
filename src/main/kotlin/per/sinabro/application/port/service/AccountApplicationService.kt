@@ -53,8 +53,21 @@ class AccountApplicationService(
         return listOf(account1.balance, account2.balance)
     }
 
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    override fun checkAllBalanced(): List<Int> {
+        val first = findAccount.findAll()
+        println("[Phantom Read] First read count: ${first.size}")
+
+        Thread.sleep(5_000)
+
+        val second = findAccount.findAll()
+        println("[Phantom Read] Second read count: ${second.size}")
+
+        return listOf(first.size, second.size)
+    }
+
     @Transactional
-    override fun register(): Long {
-        return loadAccount.loadAccount(Account())
+    override fun register(balance: Long): Long {
+        return loadAccount.loadAccount(Account(balance = balance))
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.boot.test.web.client.exchange
 import org.springframework.boot.test.web.client.getForObject
 import org.springframework.boot.test.web.client.postForObject
 import org.springframework.http.HttpMethod
+import per.sinabro.adapter.`in`.account.request.RegisterRequest
 import java.util.concurrent.Executors
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -26,7 +27,8 @@ class AccountControllerTest(
      * Dirty Read 가 발생하는지 검증한다.
      */
     test("Dirty Read: withdraw flush 후 READ_UNCOMMITTED 로 미커밋 데이터 조회") {
-        val accountId = restTemplate.postForObject<Long>("/account")!!
+        val request = RegisterRequest(balance = 1000)
+        val accountId = restTemplate.postForObject<Long>("/account", request)!!
 
         val executor = Executors.newSingleThreadExecutor()
         val withdrawFuture = executor.submit {
@@ -55,7 +57,8 @@ class AccountControllerTest(
      * 같은 트랜잭션 내에서 두 번 읽었는데 결과가 다른 Non-Repeatable Read 를 검증한다.
      */
     test("Non-Repeatable Read: READ_COMMITTED 에서 두 번의 읽기 결과가 다름") {
-        val accountId = restTemplate.postForObject<Long>("/account")!!
+        val request = RegisterRequest(balance = 1000)
+        val accountId = restTemplate.postForObject<Long>("/account", request)!!
 
         val executor = Executors.newSingleThreadExecutor()
         @Suppress("UNCHECKED_CAST")
@@ -74,5 +77,38 @@ class AccountControllerTest(
 
         balances[0] shouldBe 1000
         balances[1] shouldBe 500
+    }
+
+    /**
+     * Phantom Read 시나리오 (READ_COMMITTED)
+     *
+     * 1. registerAccount x2  → account 2건 생성
+     * 2. accounts            → 첫 번째 읽기(count=N) 후 5초 대기
+     * 3. registerAccount x1  → 2번 대기 중 새 account 커밋
+     * 4. accounts            → 두 번째 읽기 → READ_COMMITTED 로 N+1 반환
+     *
+     * 같은 트랜잭션 내에서 두 번 읽었는데 행 수가 다른 Phantom Read 를 검증한다.
+     */
+    test("Phantom Read: READ_COMMITTED 에서 두 번의 읽기 결과가 다름") {
+        val request = RegisterRequest(balance = 1000)
+        restTemplate.postForObject<Long>("/account", request)!!
+        restTemplate.postForObject<Long>("/account", request)!!
+
+        val executor = Executors.newSingleThreadExecutor()
+        @Suppress("UNCHECKED_CAST")
+        val checkFuture = executor.submit<List<Int>> {
+            restTemplate.getForObject("/accounts", List::class.java) as List<Int>
+        }
+
+        // accounts 가 첫 번째 읽기를 완료할 때까지 대기
+        Thread.sleep(500)
+
+        // 5초 대기 구간에서 새 account 추가 (phantom row)
+        restTemplate.postForObject<Long>("/account", request)!!
+
+        val counts = checkFuture.get()!!
+        executor.shutdown()
+
+        counts[1] shouldBe counts[0] + 1
     }
 })
