@@ -34,6 +34,7 @@ class AccountApplicationService(
     @Transactional(isolation = Isolation.READ_UNCOMMITTED)
     override fun checkReadUncommited(id: Long): Long {
         val account = findAccount.findAccount(id) ?: throw RuntimeException("Account not found")
+        entityManager.clear()
         println("[Read Uncommitted] Account Balance: ${account.balance}")
         return account.balance
     }
@@ -53,14 +54,14 @@ class AccountApplicationService(
         return listOf(account1.balance, account2.balance)
     }
 
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     override fun checkAllBalanced(): List<Int> {
-        val first = findAccount.findAllForUpdate()
+        val first = findAccount.findAllByBalanceGreaterThanEqual(300)
         println("[Phantom Read] First read count: ${first.size}")
 
         Thread.sleep(5_000)
 
-        val second = findAccount.findAllForUpdate()
+        val second = findAccount.findAllByBalanceGreaterThanEqual(300)
         println("[Phantom Read] Second read count: ${second.size}")
 
         return listOf(first.size, second.size)

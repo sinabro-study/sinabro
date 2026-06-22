@@ -80,17 +80,15 @@ class AccountControllerTest(
     }
 
     /**
-     * Phantom Read 시나리오 (REPEATABLE_READ + SELECT FOR UPDATE)
+     * Phantom Read 시나리오 (READ_COMMITTED)
      *
      * 1. registerAccount x2  → account 2건 생성
      * 2. accounts            → FOR UPDATE 첫 번째 읽기(count=N) 후 5초 대기
      * 3. registerAccount x1  → 2번 대기 중 새 account 커밋
      * 4. accounts            → FOR UPDATE 두 번째 읽기 → 최신 데이터(N+1) 반환
      *
-     * REPEATABLE_READ 에서도 locking read(FOR UPDATE)는 MVCC snapshot 이 아닌
-     * 최신 데이터를 읽어 Phantom Read 가 발생함을 검증한다.
      */
-    test("Phantom Read: REPEATABLE_READ 에서 두 번의 읽기 결과가 다름") {
+    test("Phantom Read: READ_COMMITTED 에서 두 번의 읽기 결과가 다름") {
         val request = RegisterRequest(balance = 1000)
         restTemplate.postForObject<Long>("/account", request)!!
         restTemplate.postForObject<Long>("/account", request)!!

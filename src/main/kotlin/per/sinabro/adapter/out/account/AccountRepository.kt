@@ -18,15 +18,11 @@ class AccountRepository(
         return accountJpaRepository.findById(id).orElse(null)
     }
 
-    override fun findAccountByBalance(balance: Long): List<Account> {
-        return accountJpaRepository.findAllByBalanceGreaterThanEqual(500)
-    }
-
     override fun findAll(): List<Account> {
         return accountJpaRepository.findAll()
     }
 
-    override fun findAllForUpdate(): List<Account> {
-        return accountJpaRepository.findAllForUpdate()
+    override fun findAllByBalanceGreaterThanEqual(balance: Long): List<Account> {
+        return accountJpaRepository.findAllByBalanceGreaterThanEqual(balance)
     }
 }
