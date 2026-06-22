@@ -25,4 +25,8 @@ class AccountRepository(
     override fun findAll(): List<Account> {
         return accountJpaRepository.findAll()
     }
+
+    override fun findAllForUpdate(): List<Account> {
+        return accountJpaRepository.findAllForUpdate()
+    }
 }
