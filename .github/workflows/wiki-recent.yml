@@ -1,0 +1,33 @@
+name: Wiki Recent Posts
+
+on:
+  gollum:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 15 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: wiki-recent
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}.wiki
+          fetch-depth: 0
+
+      - name: Update Home.md
+        run: python3 .githooks/wiki_recent.py
+
+      - name: Commit & Push
+        run: |
+          git diff --quiet && exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "wiki: 최근 글 자동 갱신"
+          git push
