@@ -1,0 +1,29 @@
+package per.sinabro.domain.inventory
+
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+
+@Entity
+class Inventory(
+    @Column(name = "product_id", unique = true, nullable = false)
+    val productId: Long,
+    quantity: Int,
+) {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, insertable = false, updatable = false)
+    val id: Long? = null
+
+    @Column(name = "quantity", nullable = false)
+    var quantity: Int = quantity
+        protected set
+
+    fun changeQuantity(quantity: Int) {
+        require(quantity > 0) { "수량은 양수여야합니다." }
+        this.quantity = quantity
+    }
+}

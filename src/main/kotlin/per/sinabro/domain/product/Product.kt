@@ -18,5 +18,6 @@ class Product(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private var id: Long? = null
+    @Column(name = "id", nullable = false, insertable = false, updatable = false)
+    var id: Long? = null
 }

@@ -7,6 +7,7 @@ class Ticket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, insertable = false, updatable = false)
     var id: Long? = null
 
     @Column(length = 1, nullable = false)
