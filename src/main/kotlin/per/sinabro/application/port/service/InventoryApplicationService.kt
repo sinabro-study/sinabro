@@ -1,5 +1,6 @@
 package per.sinabro.application.port.service
 
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import per.sinabro.application.port.`in`.inventory.command.SetSellableQuantityCommand
 import per.sinabro.application.port.`in`.inventory.usecase.SetSellableQuantityUsecase
@@ -13,6 +14,7 @@ class InventoryApplicationService(
     private val findInventory: FindInventory,
 ) : SetSellableQuantityUsecase {
 
+    @Transactional
     override fun setSellableQuantity(command: SetSellableQuantityCommand) {
         val (productId, quantity) = command
         val inventory = findInventory.findByProductId(productId)

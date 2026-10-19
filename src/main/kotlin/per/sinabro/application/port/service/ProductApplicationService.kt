@@ -1,5 +1,6 @@
 package per.sinabro.application.port.service
 
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import per.sinabro.application.port.`in`.product.command.RegisterProductCommand
 import per.sinabro.application.port.`in`.product.usecase.RegisterProductUsecase
@@ -11,6 +12,7 @@ class ProductApplicationService(
     private val loadProduct: LoadProduct
 ) : RegisterProductUsecase {
 
+    @Transactional
     override fun register(command: RegisterProductCommand) {
         val (name, price) = command
 

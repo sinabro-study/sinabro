@@ -1,4 +1,4 @@
-package per.sinabro.adapter.`in`.order.request
+package per.sinabro.adapter.`in`.purchase.request
 
 data class PurchaseProductRequest(
     val productId: Long,

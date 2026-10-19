@@ -26,4 +26,10 @@ class Inventory(
         require(quantity > 0) { "수량은 양수여야합니다." }
         this.quantity = quantity
     }
+
+    fun subtract(quantity: Int) {
+        require(quantity > 0) { "차감 수량은 양수여야합니다." }
+        require(this.quantity > 0) { "잔여 수량은 양수여야합니다." }
+        this.quantity -= quantity
+    }
 }
