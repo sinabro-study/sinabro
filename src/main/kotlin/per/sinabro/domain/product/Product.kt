@@ -9,7 +9,7 @@ import java.math.BigDecimal
 
 @Entity
 class Product(
-    @Column(name = "product_name", length = 200, nullable = false)
+    @Column(name = "product_name", length = 200, nullable = false, unique = true)
     val name: String,
 
     @Column(precision = 12, scale = 2)
