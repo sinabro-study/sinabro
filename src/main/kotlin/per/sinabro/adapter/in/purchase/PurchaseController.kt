@@ -14,10 +14,11 @@ class PurchaseController(
 
     @PostMapping("/purchases")
     fun purchaseProduct(@RequestBody request: PurchaseProductRequest) {
-        val (productId, quantity) = request
+        val (memberId, productId, quantity) = request
 
         purchaseProductUsecase.purchase(
             PurchaseProductCommand(
+                memberId = memberId,
                 productId = productId,
                 quantity = quantity,
             )
