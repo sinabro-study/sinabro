@@ -15,9 +15,9 @@ export const options = {
     scenarios: {
         purchase: {
             executor: 'constant-arrival-rate',
-            rate: 1000,
+            rate: 100,
             timeUnit: '1s',
-            duration: '1s',
+            duration: '10s',
             preAllocatedVUs: 1000,
             maxVUs: 1000,
             gracefulStop: '30s',
