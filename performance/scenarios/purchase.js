@@ -1,8 +1,13 @@
 import http from 'k6/http';
 import exec from 'k6/execution';
-import { check, fail } from 'k6';
+import { check } from 'k6';
 
-const baseUrl = 'http://localhost:8080';
+const baseUrl = __ENV.BASE_URL || 'http://localhost:8080';
+const productId = Number(__ENV.PRODUCT_ID);
+
+if (!Number.isSafeInteger(productId) || productId <= 0) {
+    throw new Error('Set PRODUCT_ID to the prepared product ID');
+}
 const headers = { 'Content-Type': 'application/json' };
 const purchaseLimit = 1000;
 
@@ -26,35 +31,7 @@ export const options = {
     },
 };
 
-export function setup() {
-    const product = http.post(
-        `${baseUrl}/product`,
-        JSON.stringify({
-            name: `loadtest-${Date.now()}-${Math.random().toString(36).slice(2)}`,
-            price: 1000,
-        }),
-        { headers }
-    );
-
-    if (!check(product, { 'product created': (r) => r.status === 200 })) {
-        fail(`Product creation failed: ${product.status} ${product.body}`);
-    }
-
-    const productId = product.json();
-    if (!Number.isSafeInteger(productId) || productId <= 0) {
-        fail('Product creation did not return a valid product ID');
-    }
-
-    // The inventory API sets the available quantity to 1,000.
-    const inventory = http.put(`${baseUrl}/inventories/${productId}`, null);
-    if (!check(inventory, { 'inventory prepared': (r) => r.status === 200 })) {
-        fail(`Inventory setup failed: ${inventory.status} ${inventory.body}`);
-    }
-
-    return { productId };
-}
-
-export default function ({ productId }) {
+export default function () {
     const index = exec.scenario.iterationInTest;
     // Arrival-rate scheduling can start an extra iteration at the time boundary.
     if (index >= purchaseLimit) return;
