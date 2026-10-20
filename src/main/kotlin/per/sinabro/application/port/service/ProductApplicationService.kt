@@ -13,12 +13,14 @@ class ProductApplicationService(
 ) : RegisterProductUsecase {
 
     @Transactional
-    override fun register(command: RegisterProductCommand) {
+    override fun register(command: RegisterProductCommand): Long {
         val (name, price) = command
 
-        loadProduct.load(product = Product(
+        val product = loadProduct.load(product = Product(
             name = name,
             price = price
         ))
+
+        return requireNotNull(product.id)
     }
 }
