@@ -5,6 +5,7 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.Version
 
 @Entity
 class Inventory(
@@ -21,6 +22,10 @@ class Inventory(
     @Column(name = "quantity", nullable = false)
     var quantity: Int = quantity
         protected set
+
+    @Version
+    @Column(name = "version", nullable = false)
+    val version: Long = 0
 
     fun changeQuantity(quantity: Int) {
         require(quantity > 0) { "수량은 양수여야합니다." }
