@@ -1,7 +1,9 @@
-plugins {
-    val kotlinVersion = "1.9.25"
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
-    id("org.springframework.boot") version "3.5.3"
+plugins {
+    val kotlinVersion = "2.4.21"
+
+    id("org.springframework.boot") version "4.1.2"
     id("io.spring.dependency-management") version "1.1.7"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
@@ -19,8 +21,11 @@ version = "0.0.1-SNAPSHOT"
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(24)
+        languageVersion = JavaLanguageVersion.of(27)
     }
+    // Kotlin's stable compiler currently supports bytecode up to JVM 26.
+    sourceCompatibility = JavaVersion.VERSION_26
+    targetCompatibility = JavaVersion.VERSION_26
 }
 
 repositories {
@@ -29,10 +34,10 @@ repositories {
 
 dependencies {
     // Spring
-    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-webmvc")
 
     // Kotlin
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("tools.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     // DB
@@ -41,13 +46,15 @@ dependencies {
 
     // Cache
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
-    implementation("org.redisson:redisson-spring-boot-starter:3.42.0")
+    implementation("org.redisson:redisson-spring-boot-starter:4.8.0")
 
     // Message
-    implementation("org.springframework.kafka:spring-kafka")
+    implementation("org.springframework.boot:spring-boot-starter-kafka")
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-restclient-test")
+    testImplementation("org.springframework.boot:spring-boot-resttestclient")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
     testImplementation("io.kotest:kotest-assertions-core:5.9.1")
@@ -57,10 +64,23 @@ dependencies {
 
 kotlin {
     compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_26)
         freeCompilerArgs.addAll("-Xjsr305=strict")
     }
 }
 
-tasks.withType<Test> {
+// Hibernate hydrates Kotlin val properties through reflection on Java 26+.
+tasks.withType<JavaExec>().configureEach {
+    jvmArgs("--enable-final-field-mutation=ALL-UNNAMED")
+}
+
+tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
+    manifest.attributes("Enable-Final-Field-Mutation" to "ALL-UNNAMED")
+}
+
+tasks.withType<Test>().configureEach {
     useJUnitPlatform()
+    jvmArgs("--enable-final-field-mutation=ALL-UNNAMED")
+    // Kotest 5's ClassGraph scanner still uses Unsafe.invokeCleaner.
+    jvmArgs("--sun-misc-unsafe-memory-access=allow")
 }

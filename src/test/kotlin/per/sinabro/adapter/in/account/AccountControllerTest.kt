@@ -3,15 +3,17 @@ package per.sinabro.adapter.`in`.account
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.boot.test.web.client.exchange
-import org.springframework.boot.test.web.client.getForObject
-import org.springframework.boot.test.web.client.postForObject
+import org.springframework.boot.resttestclient.TestRestTemplate
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate
+import org.springframework.boot.resttestclient.exchange
+import org.springframework.boot.resttestclient.getForObject
+import org.springframework.boot.resttestclient.postForObject
 import org.springframework.http.HttpMethod
 import per.sinabro.adapter.`in`.account.request.RegisterRequest
 import java.util.concurrent.Executors
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureTestRestTemplate
 class AccountControllerTest(
     private val restTemplate: TestRestTemplate
 ) : FunSpec({
