@@ -14,7 +14,7 @@ class InventoryRepository(
         return inventoryJpaRepository.save(inventory)
     }
 
-    override fun findByProductId(productId: Long): Inventory? {
+    override fun findByProductIdForUpdate(productId: Long): Inventory? {
         return inventoryJpaRepository.findByProductId(productId)
     }
 }

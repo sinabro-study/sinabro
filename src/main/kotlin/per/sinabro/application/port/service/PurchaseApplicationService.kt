@@ -18,7 +18,7 @@ class PurchaseApplicationService(
     override fun purchase(command: PurchaseProductCommand) {
         val (memberId, productId, quantity) = command
 
-        val inventory = findInventory.findByProductId(productId)
+        val inventory = findInventory.findByProductIdForUpdate(productId)
             ?: throw IllegalArgumentException("Product not found: $productId")
 
         inventory.subtract(quantity)

@@ -17,7 +17,7 @@ class InventoryApplicationService(
     @Transactional
     override fun setSellableQuantity(command: SetSellableQuantityCommand) {
         val (productId, quantity) = command
-        val inventory = findInventory.findByProductId(productId)
+        val inventory = findInventory.findByProductIdForUpdate(productId)
 
         if (inventory == null) {
             loadInventory.load(inventory = Inventory(productId, quantity))
