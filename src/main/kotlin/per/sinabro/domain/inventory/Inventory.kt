@@ -25,7 +25,7 @@ class Inventory(
 
     fun subtract(quantity: Int) {
         require(quantity > 0) { "차감 수량은 양수여야합니다." }
-        if (this.quantity < quantity) throw OutOfStockException()
+        if (this.quantity < quantity) throw OutOfStockException(this.quantity, quantity)
         this.quantity -= quantity
     }
 }

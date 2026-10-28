@@ -10,7 +10,9 @@ import per.sinabro.domain.inventory.OutOfStockException
 class ControllerAdvice {
 
     @ExceptionHandler(OutOfStockException::class)
-    fun outOfStock(): ResponseEntity<Map<String, String>> = ResponseEntity
-        .status(HttpStatus.UNPROCESSABLE_ENTITY)
-        .body(mapOf("code" to "OUT_OF_STOCK"))
+    fun outOfStock(e: OutOfStockException): ResponseEntity<Map<String, String>> {
+        return ResponseEntity
+            .status(HttpStatus.UNPROCESSABLE_ENTITY)
+            .body(mapOf("code" to "OUT_OF_STOCK"))
+    }
 }
