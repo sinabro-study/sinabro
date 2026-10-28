@@ -8,5 +8,5 @@ import per.sinabro.domain.inventory.Inventory
 interface InventoryJpaRepository : JpaRepository<Inventory, Long> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    fun findByProductId(productId: Long): Inventory?
+    fun findWithLockingByProductId(productId: Long): Inventory?
 }
