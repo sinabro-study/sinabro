@@ -12,7 +12,10 @@ if (!Number.isSafeInteger(productId) || productId <= 0) {
 const headers = { 'Content-Type': 'application/json' };
 const purchaseLimit = 1000;
 const duration = 10
-const allocatedVUs = Number(__ENV.VUS || purchaseLimit);
+const request = purchaseLimit / duration
+
+const allocatedVUs = Number(__ENV.VUS || request);
+const maxVUs = Number(__ENV.MAX_VUS || 3 * request);
 
 if (!Number.isSafeInteger(allocatedVUs) || allocatedVUs <= 0) {
     throw new Error('VUS must be a positive integer');
@@ -28,11 +31,11 @@ export const options = {
     scenarios: {
         purchase: {
             executor: 'constant-arrival-rate',
-            rate: purchaseLimit / duration,
+            rate: request,
             timeUnit: '1s',
             duration: `${duration}s`,
             preAllocatedVUs: allocatedVUs,
-            maxVUs: allocatedVUs,
+            maxVUs,
             gracefulStop: '60s',
         },
     },
