@@ -10,11 +10,11 @@ if (!Number.isSafeInteger(productId) || productId <= 0) {
     throw new Error('Set PRODUCT_ID to the prepared product ID');
 }
 const headers = { 'Content-Type': 'application/json' };
-const purchaseLimit = 1000;
+const purchaseLimit = 30000;
 const duration = 10
 const request = purchaseLimit / duration
 
-const allocatedVUs = Number(__ENV.VUS || request);
+const allocatedVUs = Number(__ENV.VUS || 8000);
 const maxVUs = Number(__ENV.MAX_VUS || 3 * request);
 
 if (!Number.isSafeInteger(allocatedVUs) || allocatedVUs <= 0) {
@@ -35,7 +35,6 @@ export const options = {
             timeUnit: '1s',
             duration: `${duration}s`,
             preAllocatedVUs: allocatedVUs,
-            maxVUs,
             gracefulStop: '60s',
         },
     },
